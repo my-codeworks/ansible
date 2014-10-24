@@ -1,0 +1,19 @@
+---
+- include: upload_ssh_public_key.yml
+- include: provision_survey.yml
+  vars:
+    droplet_name: chab-survey
+    domains:
+    - collect.chefsportalen.ninja
+    member_of:
+    - survey
+    - webserver
+- include: provision_application.yml
+  vars:
+    droplet_name: chab-application
+    domains:
+    - chefsportalen.ninja
+    - www.chefsportalen.ninja
+    member_of:
+    - app
+    - webserver

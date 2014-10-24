@@ -1,0 +1,31 @@
+---
+- name: "Provision new DigitalOcean droplet"
+  digital_ocean:
+    state: present
+    command: droplet
+    name: "{{ droplet_name }}"
+    unique_name: yes
+    client_id: "{{ lookup( 'env', 'DO_CLIENT_ID' ) }}"
+    api_key: "{{ lookup( 'env', 'DO_API_KEY' ) }}"
+    size_id: "{{ size_id }}"
+    region_id: "{{ region_id }}"
+    image_id: "{{ image_id }}"
+    ssh_key_ids: "{{ deploy_key.ssh_key.id }}"
+    # user_data: "{{ metadata }}"
+  register: server
+
+- name: "Add droplet to inventory"
+  add_host: 
+    name: "{{ server.droplet.ip_address }}"
+    groups: "{{ item }}"
+  with_items: member_of
+
+- name: "Setup domain"
+  digital_ocean_domain:
+    state: present
+    id: "{{ server.droplet.id }}"
+    name: "{{ item }}"
+    ip: "{{ server.droplet.ip_address }}"
+    client_id: "{{ lookup( 'env', 'DO_CLIENT_ID' ) }}"
+    api_key: "{{ lookup( 'env', 'DO_API_KEY' ) }}"
+  with_items: domains

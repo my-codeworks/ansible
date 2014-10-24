@@ -1,0 +1,9 @@
+---
+- name: Setup domain
+  digital_ocean_domain: >
+    state=present
+    id="{{ server.droplet.id }}"
+    name=collect.chefsportalen.ninja
+    ip={{ server.droplet.ip_address }}
+    client_id=lookup( 'env', 'DO_CLIENT_ID' )
+    api_key=lookup( 'env', 'DO_API_KEY' )

@@ -1,0 +1,8 @@
+---
+- name: Provision new DigitalOcean survey droplet
+  include: provision_droplet.yml
+  vars:
+    size_id: 66
+    region_id: 9
+    image_id: 6376601
+    metadata: '{"type":"survey"}'

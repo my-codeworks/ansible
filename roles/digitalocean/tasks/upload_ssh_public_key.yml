@@ -1,0 +1,13 @@
+---
+- name: Download deploy key from Github
+  get_url: url=https://github.com/my-codeworks-deploy.keys dest=/tmp/deploy_id_rsa.pub
+
+- name: Ensure deploy key is present at DigitalOcean
+  digital_ocean: >
+    state="present"
+    command="ssh"
+    name="Deploy key"
+    ssh_pub_key="{{ lookup( 'file', '/tmp/deploy_id_rsa.pub' ) }}"
+    client_id="0467aadca8501fa9004564da75787ca0"
+    api_key="195a8dc135753bf49d6d1e245953c940"
+  register: deploy_key
