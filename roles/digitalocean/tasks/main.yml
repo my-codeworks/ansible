@@ -4,7 +4,7 @@
   vars:
     droplet_name: chab-survey
     domains:
-    - collect.chefsportalen.ninja
+    - collect.simplex2.ninja
     member_of:
     - survey
     - webserver
@@ -12,8 +12,9 @@
   vars:
     droplet_name: chab-application
     domains:
-    - chefsportalen.ninja
-    - www.chefsportalen.ninja
+    - simplex2.ninja
+    - www.simplex2.ninja
     member_of:
     - app
     - webserver
+    - staging
