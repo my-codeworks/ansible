@@ -1,0 +1,9 @@
+---
+- name: Change owner of the rails home directory
+  file:
+    state: "directory"
+    path: "/home/rails"
+    owner: "deploy"
+    group: "www-data"
+    mode: "755"
+    recurse: "yes"

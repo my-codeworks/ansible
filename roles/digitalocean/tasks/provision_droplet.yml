@@ -30,17 +30,26 @@
     api_key: "{{ lookup( 'env', 'DO_API_KEY' ) }}"
   with_items: domains
 
-- name: SSH | Find Git repo SSH host key
+- name: SSH | Fetch SSH host key for domains
   shell: "ssh-keyscan {{ item }}"
-  with_items: "{{ domains | union([server.droplet.ip_address]) }}"
+  with_items: domains
   register: droplet_host_keys
 
-- msg: "droplet_host_keys {{ droplet_host_keys }}"
-
-- name: SSH | Add Git repo host key to known_hosts file
+- name: SSH | Add host keys for domains to known_hosts file
   lineinfile: 
     create: "yes"
     dest: "~/.ssh/known_hosts"
-    line: "{{ item.result.stdout }}"
+    line: "{{ item.stdout }}"
     state: "present"
-  with_items: droplet_host_keys
+  with_items: droplet_host_keys.results
+
+- name: SSH | Fetch SSH host key for IP
+  shell: "ssh-keyscan {{ server.droplet.ip_address }}"
+  register: droplet_host_key
+
+- name: SSH | Add host keys for IP to known_hosts file
+  lineinfile: 
+    create: "yes"
+    dest: "~/.ssh/known_hosts"
+    line: "{{ droplet_host_key.stdout }}"
+    state: "present"

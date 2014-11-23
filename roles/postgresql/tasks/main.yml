@@ -12,13 +12,16 @@
 
   tasks:
   - name: ensure apt cache is up to date
-    action: apt update_cache=yes
-  - name: ensure packages are installed
-    action: apt name={{item}}
-    with_items:
-        - postgresql
-        - libpq-dev
-        - python-psycopg2
+    apt:
+      update_cache: "yes"
+  - name: ensure postgresql packages are installed
+    apt:
+      name: "postgresql"
+      state: "latest"
+  - name: ensure postgresql-contrib packages are installed
+    apt:
+      name: "postgresql-contrib"
+      state: "latest"
 
 - hosts: staging
   sudo: yes

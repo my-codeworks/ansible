@@ -1,0 +1,23 @@
+---
+- name: Updates sshd configuration file
+  copy:
+    src: "../files/sshd_config"
+    dest: "/etc/ssh/sshd_config"
+    backup: "yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    validate: "/usr/sbin/sshd -T -f %s"
+  notify:
+  - restart sshd
+
+- name: Fetches public key for Github
+  shell: "ssh-keyscan github.com"
+  register: github_public_key
+
+- name: Adds github public key to known_hosts file
+  lineinfile: 
+    create: "yes"
+    dest: "/etc/ssh_known_hosts"
+    line: "{{ github_public_key.stdout }}"
+    state: "present"

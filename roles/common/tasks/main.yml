@@ -1,1 +1,4 @@
 ---
+- include: create_deploy_user.yml
+- include: configure_ssh.yml
+- include: install_git.yml

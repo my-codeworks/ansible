@@ -1,0 +1,3 @@
+---
+- include: setup_for_capistrano.yml
+- include: setup_for_god.yml

@@ -1,0 +1,37 @@
+---
+- name: Install god gem
+  gem:
+    name: "god"
+    state: "latest"
+
+- name: Allow deploy to sudo god
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    line: "deploy ALL=(root)NOPASSWD:/*/god"
+    validate: "visudo -cf %s"
+
+- name: Copy god config file
+  copy:
+    src: "sweplex.god"
+    dest: "/etc/sweplex.god"
+    owner: "root"
+    group: "root"
+    mode: "644"
+
+- name: Copy god init script
+  copy:
+    src: "god_init_script.sh"
+    dest: "/etc/init.d/god"
+    owner: "root"
+    group: "root"
+    mode: "644"
+
+- name: Chmod god init script executable
+  command: "chmod +x /etc/init.d/god"
+
+- name: Update init.d with the god init script
+  command: "update-rc.d -f god defaults"
+
+- name: Start god
+  command: "/etc/init.d/god start"

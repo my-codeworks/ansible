@@ -1,0 +1,27 @@
+---
+- name: Allocate swap file
+  command: "fallocate -l 4G /swapfile"
+
+- name: Set permissions to swapfile
+  command: "chmod 600 /swapfile"
+
+- name: Turn swapfile into swap space
+  command: "mkswap /swapfile"
+
+- name: Turn swap on
+  command: "swapon /swapfile"
+
+- name: Add swap to fsatb
+  lineinfile:
+    file: "/etc/fstab"
+    line: "/swapfile   none    swap    sw    0   0"
+
+- name: Set swappines
+  lineinfile:
+    file: "/etc/sysctl.conf"
+    line: "vm.swappiness=10"
+
+- name: Set cache preasure
+  lineinfile:
+    file: "/etc/sysctl.conf"
+    line: "vm.vfs_cache_pressure = 50"

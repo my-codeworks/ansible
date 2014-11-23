@@ -1,0 +1,23 @@
+---
+- name: Create remote user
+  user:
+    name: "deploy"
+    #allthethings
+    password: "$6$xDNErVAqo$mfi4NU7cAnKKytQJdWFq8SoLHvEFQUyJHpjL7uBuLiUyLwMV1b9.RTgURE1QByquUmOzb9i/dRpCofsgBu6HB/"
+    groups: "sudo,rails,www-data,rvm"
+    comment: "Deploy User"
+    shell: "/bin/bash"
+
+- name: Downloads deploys public key from Github
+  connection: local
+  get_url:
+    url: "https://github.com/my-codeworks-deploy.keys"
+    dest: "/tmp/deploy_id_rsa.pub"
+
+- name: Adds deploys public key to users authorized_keys
+  authorized_key:
+    user: "deploy"
+    key: "{{ lookup('file', '/tmp/deploy_id_rsa.pub') }}"
+    path: "/etc/ssh/authorized_keys/deploy"
+    manage_dir: "no"
+    state: "present"
