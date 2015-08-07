@@ -1,8 +1,8 @@
 ---
-- name: Change owner of the rails home directory
+- name: Change owner of the web root
   file:
     state: "directory"
-    path: "/home/rails"
+    path: "/var/www"
     owner: "deploy"
     group: "www-data"
     mode: "755"

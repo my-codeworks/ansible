@@ -3,5 +3,9 @@
   remote_user: root
   roles:
   - common
-  - postgresql
   - rails
+
+- hosts: staging
+  remote_user: root
+  roles:
+  - postgresql

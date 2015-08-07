@@ -21,3 +21,6 @@
     dest: "/etc/ssh_known_hosts"
     line: "{{ github_public_key.stdout }}"
     state: "present"
+
+- name: Moves roots authorized_keys
+  command: "cp /root/.ssh/authorized_keys /etc/ssh/authorized_keys/root"

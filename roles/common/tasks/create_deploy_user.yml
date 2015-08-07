@@ -4,7 +4,7 @@
     name: "deploy"
     #allthethings
     password: "$6$xDNErVAqo$mfi4NU7cAnKKytQJdWFq8SoLHvEFQUyJHpjL7uBuLiUyLwMV1b9.RTgURE1QByquUmOzb9i/dRpCofsgBu6HB/"
-    groups: "sudo,rails,www-data,rvm"
+    groups: "sudo,www-data"
     comment: "Deploy User"
     shell: "/bin/bash"
 
@@ -21,3 +21,8 @@
     path: "/etc/ssh/authorized_keys/deploy"
     manage_dir: "no"
     state: "present"
+
+- name: Restart SSHD
+  service:
+    name: "ssh"
+    state: "restarted"

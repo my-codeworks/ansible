@@ -1,9 +1,4 @@
 ---
-- name: Install god gem
-  gem:
-    name: "god"
-    state: "latest"
-
 - name: Allow deploy to sudo god
   lineinfile:
     dest: "/etc/sudoers"
@@ -33,5 +28,5 @@
 - name: Update init.d with the god init script
   command: "update-rc.d -f god defaults"
 
-- name: Start god
-  command: "/etc/init.d/god start"
+# - name: Start god
+#   command: "/etc/init.d/god start"

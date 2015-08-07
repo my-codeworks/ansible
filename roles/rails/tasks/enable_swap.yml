@@ -1,27 +1,41 @@
 ---
 - name: Allocate swap file
   command: "fallocate -l 4G /swapfile"
+  args:
+    creates: /swapfile
 
 - name: Set permissions to swapfile
   command: "chmod 600 /swapfile"
 
+- name: "Check swap file type"
+  command: "file /swapfile"
+  register: swapfile
+
 - name: Turn swapfile into swap space
   command: "mkswap /swapfile"
+  when: swapfile.stdout.find('swap file') == -1
 
 - name: Turn swap on
   command: "swapon /swapfile"
+  when: ansible_swaptotal_mb < 1
 
-- name: Add swap to fsatb
+- name: Add swap to fstab
   lineinfile:
-    file: "/etc/fstab"
+    dest: "/etc/fstab"
+    state: "present"
+    regexp: "^/swapfile"
     line: "/swapfile   none    swap    sw    0   0"
 
 - name: Set swappines
   lineinfile:
-    file: "/etc/sysctl.conf"
-    line: "vm.swappiness=10"
+    dest: "/etc/sysctl.conf"
+    state: "present"
+    regexp: "^vm.swappiness"
+    line: "vm.swappiness = 10"
 
 - name: Set cache preasure
   lineinfile:
-    file: "/etc/sysctl.conf"
+    dest: "/etc/sysctl.conf"
+    state: "present"
+    regexp: "^vm.vfs_cache_pressure"
     line: "vm.vfs_cache_pressure = 50"

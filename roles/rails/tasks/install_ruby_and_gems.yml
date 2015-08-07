@@ -1,0 +1,69 @@
+---
+- name: add brightbox ruby repository
+  apt_repository:
+    repo: "ppa:brightbox/ruby-ng"
+
+- name: install ruby 2.1
+  apt:
+    pkg: "ruby2.1"
+    state: "present"
+
+- name: install ruby 2.1 dev headers
+  apt:
+    pkg: "ruby2.1-dev"
+    state: "present"
+
+- name: install redis
+  apt:
+    pkg: "redis-server"
+    state: "present"
+
+- name: install build essentials
+  apt:
+    pkg: "build-essential"
+    state: "present"
+
+- name: install postgresql headers
+  apt:
+    pkg: "libpq-dev"
+    state: "present"
+
+- name: install curl development headers with SSL support
+  apt:
+    pkg: "libcurl4-openssl-dev"
+    state: "present"
+
+- name: install bundler
+  gem:
+    name: "bundler"
+    state: "present"
+    user_install: "no"
+
+- name: install god
+  gem:
+    name: "god"
+    state: "present"
+    user_install: "no"
+
+- name: install passenger gem
+  gem:
+    name: "passenger"
+    state: "present"
+    pre_release: "yes"
+    version: "5.0.0"
+    user_install: "no"
+
+- name: install crash watch gem
+  gem:
+    name: "crash-watch"
+    state: "present"
+    user_install: "no"
+
+- name: install postgres gem
+  gem:
+    name: "pg"
+    state: "present"
+    user_install: "no"
+
+- name: install passanger proper
+  command: "passenger"

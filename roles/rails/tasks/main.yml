@@ -1,3 +1,6 @@
 ---
 - include: setup_for_capistrano.yml
+- include: install_ruby_and_gems.yml
 - include: setup_for_god.yml
+- include: setup_for_passenger.yml
+- include: enable_swap.yml

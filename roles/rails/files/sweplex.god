@@ -1,4 +1,4 @@
-RAILS_ROOT = "/home/rails/sweplex/current"
+RAILS_ROOT = "/var/www/sweplex/current"
 
 God.watch do |w|
   pid_file = File.join(RAILS_ROOT, "tmp/pids/unicorn.pid")
@@ -13,6 +13,7 @@ God.watch do |w|
   w.pid_file = pid_file
 
   w.behavior(:clean_pid_file)
+  w.interval = 30.seconds
 
   # When to start?
   w.start_if do |start|

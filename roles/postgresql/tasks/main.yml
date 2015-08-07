@@ -6,39 +6,49 @@
 # with access to the "myapp" database.
 #
 ---
-- hosts: staging
-  sudo: yes
-  gather_facts: no
+- name: ensure apt cache is up to date
+  apt:
+    update_cache: "yes"
 
-  tasks:
-  - name: ensure apt cache is up to date
-    apt:
-      update_cache: "yes"
-  - name: ensure postgresql packages are installed
-    apt:
-      name: "postgresql"
-      state: "latest"
-  - name: ensure postgresql-contrib packages are installed
-    apt:
-      name: "postgresql-contrib"
-      state: "latest"
+- name: ensure postgresql package is installed
+  apt:
+    name: "postgresql"
+    state: "latest"
 
-- hosts: staging
+- name: ensure postgresql headers package is installed
+  apt:
+    name: "libpq-dev"
+    state: "latest"
+
+- name: ensure postgresql-contrib package is installed
+  apt:
+    name: "postgresql-contrib"
+    state: "latest"
+
+- name: install psycopg2 python module
+  apt:
+    name: "python-psycopg2"
+    state: "latest"
+
+- name: ensure database is created
   sudo: yes
   sudo_user: postgres
-  gather_facts: no
+  postgresql_db:
+    name: "{{ dbname }}"
+    encoding: "UTF-8"
 
-  vars:
-    dbname: simplex2_development
-    dbuser: simplex2
-    dbpassword: simplex2
+- name: ensure user has access to database
+  sudo: yes
+  sudo_user: postgres
+  postgresql_user:
+    db: "{{ dbname }}"
+    name: "{{ dbuser }}"
+    password: "{{ dbpassword }}"
+    priv: "ALL"
 
-  tasks:
-  - name: ensure database is created
-    postgresql_db: name={{dbname}}
-
-  - name: ensure user has access to database
-    postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
-
-  - name: ensure user does not have unnecessary privilege
-    postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+- name: ensure user does not have unnecessary privilege
+  sudo: yes
+  sudo_user: postgres
+  postgresql_user:
+    name: "{{ dbuser }}"
+    role_attr_flags: "NOSUPERUSER,NOCREATEDB"

@@ -1,0 +1,7 @@
+---
+- name: Allow deploy to sudo passenger
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    line: "deploy ALL=(root)NOPASSWD:/usr/local/bin/passenger*"
+    validate: "visudo -cf %s"

@@ -1,20 +1,24 @@
 ---
 - include: upload_ssh_public_key.yml
-- include: provision_survey.yml
-  vars:
-    droplet_name: chab-survey
-    domains:
-    - collect.simplex2.ninja
-    member_of:
-    - survey
-    - webserver
+# - include: provision_survey.yml
+#   vars:
+#     droplet_name: chab-survey
+#     domains:
+#     - collect.simplex2.ninja
+#     member_of:
+#     - survey
+#     - webserver
 - include: provision_application.yml
   vars:
-    droplet_name: chab-application
+    droplet_name: sweplex-staging
     domains:
-    - simplex2.ninja
-    - www.simplex2.ninja
+    - stage.sweplex.com
     member_of:
-    - app
-    - webserver
     - staging
+- include: provision_application.yml
+  vars:
+    droplet_name: sweplex-application
+    domains:
+    - app.sweplex.com
+    member_of:
+    - production
